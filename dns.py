@@ -72,18 +72,18 @@ class ModifyDnsFile(SubCommand):
         file_name_db = self.db_path(working_dir, zone_id)
 
         # Debug
-        print "user: " + hetzner_user
-        print "pass: " + hetzner_pass
-        print "file: " + file_name_db
-        print "zone: " + zone_id
+        # print "user: " + hetzner_user
+        # print "pass: " + hetzner_pass
+        # print "file: " + file_name_db
+        # print "zone: " + zone_id
 
         # Run actions
         action = args.action
         if "store" == action.lower():
-            print "running store"
-            # self.store_dns_file(hetzner_user, hetzner_pass, file_name_db, zone_id)
+            # print "running store"
+            self.store_dns_file(hetzner_user, hetzner_pass, file_name_db, zone_id)
         elif "load" == action.lower():
-            print "running load"
+            # print "running load"
             self.load_dns_file(hetzner_user, hetzner_pass, file_name_db, zone_id)
         else:
             print "unable to determine action: " + action
@@ -116,12 +116,15 @@ class ModifyDnsFile(SubCommand):
         dns = db_input.read()
         db_input.close()
 
-        response = web.request(path="/dns/update" + zone_id, method="POST", data=[
+        response = web.request(path="/dns/update", method="POST", data=[
             ("id", zone_id),
             ("zonefile", dns),
             ("_csrf_token", token),
         ])
-        response.status()
+        if response.status != 200:
+            print "Error status was: " + response.status
+            print "Response was: " + response.read()
+            exit(11)
 
     def load_dns_file(self, hetzner_user, hetzner_pass, file_name_db, zone_id):
         web = RobotWebInterface(user=hetzner_user, passwd=hetzner_pass)
