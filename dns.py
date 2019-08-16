@@ -3,12 +3,8 @@ import locale
 import os
 import re
 import sys
+from ConfigParser import ConfigParser
 from HTMLParser import HTMLParser
-
-try:
-    from ConfigParser import ConfigParser
-except ImportError:
-    from configparser import ConfigParser
 
 from hetzner.robot import RobotWebInterface
 
