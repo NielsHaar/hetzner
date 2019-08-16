@@ -110,7 +110,9 @@ class ModifyDnsFile(SubCommand):
 
         response = web.request(path="/dns/update/id/" + zone_id, method="GET")
         content = response.read()
-        token = RE_CSRF_TOKEN.search(str(content))
+        token = RE_CSRF_TOKEN \
+            .search(str(content)) \
+            .group(1)
 
         db_input = open(file_name_db, "r")
         dns = db_input.read()
@@ -132,7 +134,8 @@ class ModifyDnsFile(SubCommand):
 
         response = web.request(path="/dns/update/id/" + zone_id, method="GET")
         content = response.read()
-        dns = RE_DNS_ENTRIES.search(str(content)) \
+        dns = RE_DNS_ENTRIES \
+            .search(str(content)) \
             .group(1)
 
         html_parser = HTMLParser()
