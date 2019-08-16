@@ -5,7 +5,10 @@ import re
 import sys
 from HTMLParser import HTMLParser
 
-import configparser
+try:
+    from ConfigParser import ConfigParser
+except ImportError:
+    from configparser import ConfigParser
 
 from hetzner.robot import RobotWebInterface
 
@@ -90,16 +93,16 @@ class ModifyDnsFile(SubCommand):
             exit(10)
 
     def load_config(self, config_file):
-        config = configparser.ConfigParser()
+        config = ConfigParser()
         config.read(config_file)
 
         return config
 
     def config_hetzner_user(self, config):
-        return config['hetzner']['UserName']
+        return config.get('hetzner', 'UserName')
 
     def config_hetzner_pass(self, config):
-        return config['hetzner']['Password']
+        return config.get('hetzner', 'Password')
 
     def db_path(self, working_dir, zone_id):
         return working_dir + "/" + zone_id + ".db"
