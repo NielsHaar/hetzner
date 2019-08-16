@@ -1,3 +1,6 @@
 *.pyc
 /build/
 /result
+/.idea
+*.iml
+/dns.config
